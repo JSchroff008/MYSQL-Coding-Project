@@ -94,7 +94,7 @@ public class ProjectDao extends DaoBase {
 			try {
 				Project project = null;
 				try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-					//setParameter(stmt, 1, projectId, Integer.class);
+					// setParameter(stmt, 1, projectId, Integer.class);
 					stmt.setInt(1, projectId);
 					try (ResultSet rs = stmt.executeQuery()) {
 						if (rs.next()) {
@@ -136,8 +136,7 @@ public class ProjectDao extends DaoBase {
 
 				return categories;
 			}
-		}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e);
 		}
 	}

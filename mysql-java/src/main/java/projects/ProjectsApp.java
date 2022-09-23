@@ -77,7 +77,7 @@ public class ProjectsApp {
 		System.out.println("You have successfully created project: " + dbProject);
 
 	}
-	
+
 	private void listProjects() {
 		List<Project> projects = projectService.fetchAllProjects();
 		System.out.println("\nProjects:");
@@ -93,14 +93,14 @@ public class ProjectsApp {
 		curProject = projectService.fetchProjectById(projectId);
 
 	}
-	
+
 	private int getUserSelection() {
 		printOperations();
 		Integer input = getIntInput("Enter menu selection");
 
 		return Objects.isNull(input) ? -1 : input;
 	}
-	
+
 	private Integer getIntInput(String prompt) {
 		String input = getStringInput(prompt);
 		if (Objects.isNull(input)) {
@@ -113,7 +113,7 @@ public class ProjectsApp {
 			throw new DbException(input + " is not a valid number");
 		}
 	}
-	
+
 	private BigDecimal getDecimalInput(String prompt) {
 		String input = getStringInput(prompt);
 		if (Objects.isNull(input)) {
@@ -139,11 +139,11 @@ public class ProjectsApp {
 
 	private void printOperations() {
 		System.out.println("\nThese are the avialble selections. Press the Enter key to quit:");
-		operations.forEach(Line -> System.out.println(" " + Line));
-		if(Objects.isNull(curProject)) {
+		operations.forEach(line -> System.out.println(" " + line));
+		if (Objects.isNull(curProject)) {
 			System.out.println("\nYou are not working with a project.");
 		} else {
-			System.out.println("\nYou are working with project: ");
+			System.out.println("\nYou are working with project: " + curProject);
 		}
 	}
 }
