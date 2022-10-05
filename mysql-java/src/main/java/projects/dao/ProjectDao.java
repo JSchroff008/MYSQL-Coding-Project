@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.mysql.cj.protocol.*;
+
 import projects.entity.Category;
 import projects.entity.Material;
 import projects.entity.Project;
@@ -89,10 +91,12 @@ public class ProjectDao extends DaoBase {
 
 	public Optional<Project> fetchProjectById(Integer projectId) {
 		String sql = "SELECT * FROM " + PROJECT_TABLE + " WHERE project_id = ?";
+		
 		try (Connection conn = DbConnection.getConnection()) {
 			startTransaction(conn);
 			try {
 				Project project = null;
+				
 				try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 					// setParameter(stmt, 1, projectId, Integer.class);
 					stmt.setInt(1, projectId);
@@ -108,6 +112,7 @@ public class ProjectDao extends DaoBase {
 					project.getCategories().addAll(fetchCategoriesForProject(conn, projectId));
 				}
 				commitTransaction(conn);
+				
 				return Optional.ofNullable(project);
 			} catch (Exception e) {
 				rollbackTransaction(conn);
@@ -146,6 +151,7 @@ public class ProjectDao extends DaoBase {
 
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			setParameter(stmt, 1, projectId, Integer.class);
+			
 			try (ResultSet rs = stmt.executeQuery()) {
 				List<Step> steps = new LinkedList<>();
 				while (rs.next()) {

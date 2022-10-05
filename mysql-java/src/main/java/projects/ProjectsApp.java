@@ -54,6 +54,7 @@ public class ProjectsApp {
 			} catch (Exception e) {
 
 				System.out.println("\nError: " + e + " Please try again.");
+				e.printStackTrace();
 			}
 		}
 	}
