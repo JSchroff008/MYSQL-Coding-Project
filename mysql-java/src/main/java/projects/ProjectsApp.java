@@ -18,7 +18,9 @@ public class ProjectsApp {
 	private List<String> operations = List.of(
 			"1) Add a project",
 			"2) List projects",
-			"3) Select a Project"
+			"3) Select a Project",
+			"4) Update Project Details",
+			"5) Delete a Project"
 	);
 
 	public static void main(String[] args) {
@@ -47,6 +49,11 @@ public class ProjectsApp {
 				case 3:
 					selectProject();
 					break;
+				case 4:
+					updateProjectDetails();
+					break;
+				case 5:
+					deleteProject();
 				default:
 					System.out.println("\n" + selection + ": not a valid selection. Please try again.");
 					break;
@@ -92,6 +99,49 @@ public class ProjectsApp {
 		Integer projectId = getIntInput("Enter a project ID to select a project");
 		curProject = null;
 		curProject = projectService.fetchProjectById(projectId);
+
+	}
+
+	private void updateProjectDetails() {
+		if (Objects.isNull(curProject)) {
+			System.out.println("\nPlease select a project");
+			return;
+		}
+		String projectName = getStringInput("Enter the project name [" + curProject.getProjectName() + "]");
+
+		BigDecimal estimatedHours = getDecimalInput(
+				"Enter the new estimated hours of the project [" + curProject.getEstimatedHours() + "]");
+
+		BigDecimal actualHours = getDecimalInput(
+				"Enter the new actual hours of the project [" + curProject.getActualHours() + "]");
+
+		Integer difficulty = getIntInput("Enter the new difficulty (1-5) [" + curProject.getDifficulty() + "]");
+
+		String notes = getStringInput("Update notes? [" + curProject.getNotes() + "]");
+
+		Project project = new Project();
+		project.setProjectId(curProject.getProjectId());
+
+		project.setProjectName(Objects.isNull(projectName) ? curProject.getProjectName() : projectName);
+		project.setEstimatedHours(Objects.isNull(estimatedHours) ? curProject.getEstimatedHours() : estimatedHours);
+		project.setActualHours(Objects.isNull(actualHours) ? curProject.getActualHours() : actualHours);
+		project.setDifficulty(Objects.isNull(difficulty) ? curProject.getDifficulty() : difficulty);
+		project.setNotes(Objects.isNull(notes) ? curProject.getNotes() : notes);
+
+		projectService.modifyProjectDetails(project);
+		curProject = projectService.fetchProjectById(curProject.getProjectId());
+
+	}
+
+	private void deleteProject() {
+		listProjects();
+		Integer projectId = getIntInput("Please enter the ID for which project you want to delete: ");
+
+		projectService.deleteProject(projectId);
+		System.out.println("Project " + projectId + " was deleted.");
+		if (Objects.nonNull(curProject) && curProject.getProjectId().equals(projectId)) {
+			curProject = null;
+		}
 
 	}
 
